@@ -16,7 +16,7 @@ public class CharacterCase : ProgramContent
         if (currentProgram.Platform == Platform.C64)
         {
             if (_upperCase)
-                return _lockedCase ? "poke53271,21:?chr$(8)" : "poke53271,21:?chr$(9)";
+                return _lockedCase ? "poke53272,21:?chr$(8)" : "poke53271,21:?chr$(9)";
 
             return _lockedCase ? "poke53272,23:?chr$(8)" : "poke53272,23:?chr$(9)";
         }
@@ -24,9 +24,9 @@ public class CharacterCase : ProgramContent
         if (currentProgram.Platform == Platform.Vic20)
         {
             if (_upperCase)
-                return _lockedCase ? "poke53271,21:?chr$(8)" : "poke53271,21:?chr$(9)";
+                return _lockedCase ? "poke36869,240:?chr$(8)" : "poke53271,21:?chr$(9)";
 
-            return _lockedCase ? "poke53272,23:?chr$(8)" : "poke53272,23:?chr$(9)";
+            return _lockedCase ? "poke36869,242:?chr$(8)" : "poke53272,23:?chr$(9)";
         }
 
         throw new UnsupportedPlatformException();
