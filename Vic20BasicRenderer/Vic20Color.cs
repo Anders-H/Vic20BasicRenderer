@@ -6,16 +6,16 @@ public enum Vic20Color
     White,
     Red,
     Cyan,
-    Violet,
+    Purple,
     Green,
     Blue,
     Yellow,
     Orange,
-    Brown,
     LightOrange,
     Pink,
     LightCyan,
     LightPurple,
+    LightGreen,
     LightBlue,
     LightYellow
 }

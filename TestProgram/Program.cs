@@ -7,7 +7,7 @@ var p = new BasicProgram(Platform.Vic20);
 
 var testLabel = new Label();
 p.CharacterCase(false, true);
-p.Color(Vic20BorderColor.Green, Vic20Color.LightYellow);
+p.Color(Vic20BorderColor.Green, Vic20Color.LightYellow, false);
 p.Print((StringConstant)"test program!");
 p.Add(testLabel);
 p.Print((StringConstant)"hello world");

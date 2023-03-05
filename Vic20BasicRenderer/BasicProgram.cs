@@ -98,6 +98,6 @@ public class BasicProgram
     public void Goto(Label label) => Add(new Goto(label));
     public void Print(params Expression[] expressions) => Add(new Print(expressions));
     public void CharacterCase(bool upperCase, bool lockedCase) => Add(new CharacterCase(upperCase, lockedCase));
-    public void Color(Vic20BorderColor borderColor, Vic20Color backgroundColor) => Add(new Color(borderColor, backgroundColor));
+    public void Color(Vic20BorderColor borderColor, Vic20Color backgroundColor, bool vic20InvertedMode) => Add(new Color(borderColor, backgroundColor, vic20InvertedMode));
     public void Color(C64Color borderColor, C64Color backgroundColor) => Add(new Color(borderColor, backgroundColor));
 }

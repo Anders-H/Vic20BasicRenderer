@@ -8,6 +8,7 @@ public class Color : ProgramContent
     public C64Color C64BackgroundColor { get; internal set; }
     public Vic20BorderColor Vic20BorderColor { get; internal set; }
     public Vic20Color Vic20BackgroundColor { get; internal set; }
+    public bool Vic20InvertedMode { get; internal set; }
 
     public Color(C64Color borderColor, C64Color backgroundColor)
     {
@@ -15,14 +16,16 @@ public class Color : ProgramContent
         C64BackgroundColor = backgroundColor;
         Vic20BorderColor = Vic20BorderColor.Cyan;
         Vic20BackgroundColor = Vic20Color.White;
+        Vic20InvertedMode = false;
     }
 
-    public Color(Vic20BorderColor borderColor, Vic20Color backgroundColor)
+    public Color(Vic20BorderColor borderColor, Vic20Color backgroundColor, bool vic20InvertedMode)
     {
         C64BorderColor = C64Color.LightBlue;
         C64BackgroundColor = C64Color.Blue;
         Vic20BorderColor = borderColor;
         Vic20BackgroundColor = backgroundColor;
+        Vic20InvertedMode = vic20InvertedMode;
     }
 
     public override string GetCode(List<ProgramContent> currentProgramContent, BasicProgram currentProgram, int currentIndex)
@@ -38,7 +41,11 @@ public class Color : ProgramContent
         {
             var backgroundColor = (int)Vic20BackgroundColor;
             var borderColor = (int)Vic20BorderColor;
-            var color = backgroundColor * 16 + borderColor + 8;
+            var color = backgroundColor * 16 + borderColor;
+
+            if (!Vic20InvertedMode)
+                color += 8;
+
             return $"poke36879,{color}";
         }
 
