@@ -4,15 +4,12 @@ using Vic20BasicRenderer.Expressions;
 
 var p = new BasicProgram(Platform.Vic20);
 
-var counter = p.CreateInt();
-
-var testLabel = new Label();
-p.CharacterCase(false, true);
-p.Color(Vic20BorderColor.Green, Vic20Color.LightYellow, false);
-p.Print((StringConstant)"test program!");
-p.Add(testLabel);
-p.Print((StringConstant)"hello world");
-p.Goto(testLabel);
-p.Goto(testLabel);
+var counter = p.CreateFloat();
+var something = p.CreateFloat();
+p.AddFree($"{something}=1");
+p.AddFree($"for{counter}=1to10");
+p.AddFree($"{something}={something}*2");
+p.Print(something);
+p.AddFree($"next{counter}");
 
 Console.WriteLine(p.GetCode());

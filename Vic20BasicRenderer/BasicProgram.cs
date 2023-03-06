@@ -57,21 +57,26 @@ public class BasicProgram
         return new IntVariable(_variableNames[_usedIntPointer]);
     }
 
-    public IntVariable CreateFloat()
+    public FloatVariable CreateFloat()
     {
         _usedFloatPointer++;
-        return new IntVariable(_variableNames[_usedFloatPointer]);
+        return new FloatVariable(_variableNames[_usedFloatPointer]);
     }
 
-    public IntVariable CreateString()
+    public StringVariable CreateString()
     {
         _usedStringPointer++;
-        return new IntVariable(_variableNames[_usedStringPointer]);
+        return new StringVariable(_variableNames[_usedStringPointer]);
     }
 
     public int AddFree(string code)
     {
-        
+        var p = new FreeTextCode(code)
+        {
+            Index = ProgramContent.Count
+        };
+        ProgramContent.Add(p);
+        return p.Index;
     }
 
     public void Add(ProgramContent p)

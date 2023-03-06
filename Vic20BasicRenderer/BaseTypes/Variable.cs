@@ -1,6 +1,6 @@
 ﻿namespace Vic20BasicRenderer.BaseTypes;
 
-public abstract class Variable : ProgramContent
+public abstract class Variable : Expression
 {
     public string UnderlyingName { get; internal set; }
 
