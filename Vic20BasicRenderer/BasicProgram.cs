@@ -1,11 +1,16 @@
 ﻿using System.Text;
 using Vic20BasicRenderer.BaseTypes;
 using Vic20BasicRenderer.Commands;
+using Vic20BasicRenderer.Variables;
 
 namespace Vic20BasicRenderer;
 
 public class BasicProgram
 {
+    private int _usedIntPointer = -1;
+    private int _usedFloatPointer = -1;
+    private int _usedStringPointer = -1;
+    private readonly List<string> _variableNames;
     internal int LineNumber { get; set; }
     private List<ProgramContent> ProgramContent { get; }
     public Platform Platform { get; }
@@ -15,12 +20,58 @@ public class BasicProgram
         LineNumber = 0;
         ProgramContent = new List<ProgramContent>();
         Platform = platform;
+        _variableNames = new List<string>();
+        CreateVariableNames();
+    }
+
+    private void CreateVariableNames()
+    {
+        _variableNames.Clear();
+        const string firstCharacter = "abcdefghijklmnopqrstuvwxyz";
+        const string secondCharacter = "abcdefghijklmnopqrstuvwxyz0123456789";
+        
+        foreach (var c in firstCharacter)
+            _variableNames.Add(c.ToString());
+        
+        foreach (var c in firstCharacter)
+        {
+            _variableNames.Add(c.ToString());
+
+            foreach (var c2 in secondCharacter)
+                _variableNames.Add(c2.ToString());
+        }
     }
 
     public void NewProgram()
     {
         LineNumber = 0;
         ProgramContent.Clear();
+        _usedIntPointer = -1;
+        _usedFloatPointer = -1;
+        _usedStringPointer = -1;
+    }
+
+    public IntVariable CreateInt()
+    {
+        _usedIntPointer++;
+        return new IntVariable(_variableNames[_usedIntPointer]);
+    }
+
+    public IntVariable CreateFloat()
+    {
+        _usedFloatPointer++;
+        return new IntVariable(_variableNames[_usedFloatPointer]);
+    }
+
+    public IntVariable CreateString()
+    {
+        _usedStringPointer++;
+        return new IntVariable(_variableNames[_usedStringPointer]);
+    }
+
+    public int AddFree(string code)
+    {
+        
     }
 
     public void Add(ProgramContent p)
