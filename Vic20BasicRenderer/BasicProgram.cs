@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Vic20BasicRenderer.BaseTypes;
 using Vic20BasicRenderer.Commands;
+using Vic20BasicRenderer.Expressions;
 using Vic20BasicRenderer.Variables;
 
 namespace Vic20BasicRenderer;
@@ -93,6 +94,7 @@ public class BasicProgram
 
     public string GetCode()
     {
+        RenderCustomLibraries();
         CreateLineNumbers();
 
         var s = new StringBuilder();
@@ -112,6 +114,32 @@ public class BasicProgram
         }
 
         return s.ToString().Trim();
+    }
+
+    private void RenderCustomLibraries()
+    {
+        var renderedLibTypes = new List<Type>();
+
+        bool again;
+        do
+        {
+            again = false;
+
+            foreach (var programContent in ProgramContent)
+            {
+                if (programContent is CustomLibrary lib && !renderedLibTypes.Exists(x => x == programContent.GetType()))
+                {
+                    if (renderedLibTypes.Count <= 0 && ProgramContent.Count > 0 && ProgramContent.Last().GetCode(ProgramContent, this, 0) != "end")
+                        AddFree("end");
+
+                    lib.AddLibraryCode(this);
+                    renderedLibTypes.Add(programContent.GetType());
+                    again = true;
+                    break;
+                }
+            }
+
+        } while (again);
     }
 
     private void CreateLineNumbers()
@@ -135,8 +163,14 @@ public class BasicProgram
         }
 
         foreach (var programContent in ProgramContent)
+        {
             if (programContent is Goto gto)
                 gto.TargetLineNumber = GetLineNumberFor(gto.Label);
+            else if (programContent is Gosub gsb)
+                gsb.TargetLineNumber = GetLineNumberFor(gsb.Label);
+            else if (programContent is CustomLibrary lib)
+                lib.TargetLineNumber = GetLineNumberFor(lib.LibraryLabel);
+        }
     }
 
     internal int GetLineNumberFor(Label label)
@@ -151,9 +185,13 @@ public class BasicProgram
         return 0;
     }
 
-    public void Goto(Label label) => Add(new Goto(label));
-    public void Print(params Expression[] expressions) => Add(new Print(expressions));
     public void CharacterCase(bool upperCase, bool lockedCase) => Add(new CharacterCase(upperCase, lockedCase));
     public void Color(Vic20BorderColor borderColor, Vic20Color backgroundColor, bool vic20InvertedMode) => Add(new Color(borderColor, backgroundColor, vic20InvertedMode));
     public void Color(C64Color borderColor, C64Color backgroundColor) => Add(new Color(borderColor, backgroundColor));
+    public void Gosub(Label label) => Add(new Gosub(label));
+    public void Goto(Label label) => Add(new Goto(label));
+    public void LibraryCall(CustomLibrary library) => Add(library);
+    public void Print(params Expression[] expressions) => Add(new Print(expressions));
+    public void Print(string text) => Add(new Print(new StringConstant(text)));
+    public void Return() => AddFree("return");
 }
